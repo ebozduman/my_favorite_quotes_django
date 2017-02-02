@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Quotes</title>
+    </head>
+    <style>
+    a{
+        display: inline-block;
+    }
+    span{
+        color: red;
+    }
+    </style>
+    <body>
+        <a href="/show_home">Dashboard</a>
+        <a href="/logout">Log Out</a>
+        <p>Posts By {{poster_alias}}</p>
+        <p>Count: {{count}}</p>
+        <div id="poster_favs">
+            {% for quote in poster_list %}
+            <p><span id="quoted_by>">{{quote.quoted_by}}: </span>{{quote.quote_text}}</p>
+            {% endfor%}
+        </div>
+    </body>
+</html>

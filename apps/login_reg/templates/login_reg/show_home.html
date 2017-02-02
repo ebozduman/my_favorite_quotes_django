@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Quotes</title>
+    </head>
+    <style>
+        #contribute{
+            width: 300px;
+            height: 300px;
+            margin-left: 600px;
+        }
+        #contr_quote input{
+            display: block;
+        }
+        #quote_textarea{
+            width: 150px;
+            height: 70px;
+        }
+        #contr_quote{
+        }
+        .link{
+            font-style: italic;
+        }
+        #quotable_quotes{
+            width: 450px;
+            display: inline-block;
+        }
+        #your_favorites{
+            width: 450px;
+            display: inline-block;
+        }
+    </style>
+    <body>
+        <h2>Success! Welcome, {{user.first_name}}</h2>
+        <p>Quotable Quotes</p>
+        <div id="quotable_quotes">
+            {% for quote in quotes_list %}
+            <p>{{quote.quoted_by}}: {{quote.quote_text}}</p>
+            <p class="link">Posted by <a href="/poster_favorites/{{quote.poster_id}}">{{quote.poster_alias}}</a></p>
+            <form action="/add_to_my_favorites" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="quote_id" value="{{quote.id}}">
+                <input type="submit" name="my_fav" value="Add to My List">
+            </form>
+            {% endfor%}
+        </div>
+        <div id="your_favorites">
+            <p>Your Favorites</p>
+            {% for f in favorites_list %}
+            <p>{{f.quoted_by}}: {{f.quote_text}}</p>
+            <p class="link">Posted by <a href="/poster_favorites/{{f.poster_id}}">{{f.poster_alias}}</a></p>
+            <form action="/remove_from_my_list" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="quote_id" value="{{f.id}}">
+                <input type="submit" name="my_fav" value="Remove From My List">
+            </form>
+            {% endfor%}
+        </div>
+        <div id="contribute">
+            <p>Contribute a Quote:</p>
+            <form id="contr_quote" action="/add_quote" method="post">
+                {% csrf_token %}
+                Quoted By: <input type="text" name="quoted_by">
+                Message: <input id="quote_textarea" type="textarea" name="quote_textarea">
+                <input type="submit" name="submit">
+            </form>
+        </div>
+        <!-- <p>Successfully {{login_state}}!</p> -->
+        <a href="/logout"><button>Log Out</button></a>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{message.tags}}" {% endif %}> {{message}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </body>
+</html>
